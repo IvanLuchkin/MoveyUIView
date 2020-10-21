@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/news"
+        android:title="News"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/ic_today_black_18dp"/>
+    <item
+        android:id="@+id/suggestions"
+        android:title="Suggestions"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/ic_movie_black_18dp"/>
+
+    <item
+        android:id="@+id/profile"
+        android:title="Profile"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/ic_person_black_18dp"/>
+
+</menu>
