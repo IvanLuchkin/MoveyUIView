@@ -4,16 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fitsSystemWindows="true"
-    android:id="@+id/activity_news"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".NewsActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/topbar_news"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/topbar_grad"
+        android:elevation="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:text="@string/app_name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
     <com.mindorks.placeholderview.InfinitePlaceHolderView
         android:id="@+id/loadMoreView"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="640dp" />
+        android:layout_height="620dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bot_nav"

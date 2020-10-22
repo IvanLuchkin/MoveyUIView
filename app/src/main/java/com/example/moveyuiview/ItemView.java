@@ -24,8 +24,8 @@ public class ItemView {
     @View(R.id.newsImageView)
     private ImageView imageView;
 
-    private InfiniteFeedInfo mInfo;
-    private Context mContext;
+    private final InfiniteFeedInfo mInfo;
+    private final Context mContext;
 
     public ItemView(Context context, InfiniteFeedInfo info) {
         mContext = context;

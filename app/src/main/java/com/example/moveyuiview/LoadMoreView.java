@@ -15,8 +15,8 @@ public class LoadMoreView {
 
     public static final int LOAD_VIEW_SET_COUNT = 6;
 
-    private InfinitePlaceHolderView mLoadMoreView;
-    private List<InfiniteFeedInfo> mFeedList;
+    private final InfinitePlaceHolderView mLoadMoreView;
+    private final List<InfiniteFeedInfo> mFeedList;
 
     public LoadMoreView(InfinitePlaceHolderView loadMoreView, List<InfiniteFeedInfo> feedList) {
         this.mLoadMoreView = loadMoreView;

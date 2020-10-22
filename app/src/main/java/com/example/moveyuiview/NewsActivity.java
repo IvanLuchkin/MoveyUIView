@@ -2,12 +2,12 @@ package com.example.moveyuiview;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mindorks.placeholderview.InfinitePlaceHolderView;
@@ -22,6 +22,9 @@ public class NewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+
+        Toolbar myToolbar = findViewById(R.id.topbar_news);
+        setSupportActionBar(myToolbar);
 
         BottomNavigationView navView = findViewById(R.id.bot_nav);
         navView.setSelectedItemId(R.id.news);
@@ -49,7 +52,7 @@ public class NewsActivity extends AppCompatActivity {
             }
         });
 
-        mLoadMoreView = (InfinitePlaceHolderView)findViewById(R.id.loadMoreView);
+        mLoadMoreView = findViewById(R.id.loadMoreView);
         setupView();
     }
 

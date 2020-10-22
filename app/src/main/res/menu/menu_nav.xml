@@ -3,18 +3,18 @@
 
     <item
         android:id="@+id/news"
-        android:title="News"
+        android:title="@string/news"
         android:iconTint="@color/colorPrimary"
         android:icon="@drawable/ic_today_black_18dp"/>
     <item
         android:id="@+id/suggestions"
-        android:title="Suggestions"
+        android:title="@string/suggestions"
         android:iconTint="@color/colorPrimary"
         android:icon="@drawable/ic_movie_black_18dp"/>
 
     <item
         android:id="@+id/profile"
-        android:title="Profile"
+        android:title="@string/profile"
         android:iconTint="@color/colorPrimary"
         android:icon="@drawable/ic_person_black_18dp"/>
 

@@ -2,6 +2,7 @@ package com.example.moveyuiview;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.bot_nav);
         navView.setSelectedItemId(R.id.profile);
+
+        Toolbar myToolbar = findViewById(R.id.topbar_profile);
+        setSupportActionBar(myToolbar);
 
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

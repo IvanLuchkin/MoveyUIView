@@ -1,17 +1,14 @@
 package com.example.moveyuiview;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,23 +19,23 @@ import java.util.List;
 
 public class SuggestionsActivity extends AppCompatActivity {
 
-    private MovieCard movieCardData[];
     private MovieCardsAdapter adapter;
     SwipeFlingAdapterView flingContainer;
-    private ListView listView;
     List<MovieCard> rowItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggestions);
+        Toolbar myToolbar = findViewById(R.id.topbar_suggestions);
+        setSupportActionBar(myToolbar);
 
         BottomNavigationView navView = findViewById(R.id.bot_nav);
         navView.setSelectedItemId(R.id.suggestions);
 
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            public boolean onNavigationItemSelected(MenuItem item) {
                 switch(item.getItemId()) {
                     case R.id.news :
                         startActivity(new Intent(getApplicationContext(), NewsActivity.class));
@@ -59,7 +56,7 @@ public class SuggestionsActivity extends AppCompatActivity {
             }
         });
 
-        flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        flingContainer = findViewById(R.id.frame);
 
         rowItems = new ArrayList<>();
         rowItems.add(new MovieCard("Forrest Gump"));
@@ -118,22 +115,16 @@ public class SuggestionsActivity extends AppCompatActivity {
 
     public void onWatchedButtonTapped(View view) {
         flingContainer.getTopCardListener().selectRight();
-        Button button = (Button)findViewById(R.id.watched_button);
-        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
-        button.startAnimation(myAnim);
+        Button button = findViewById(R.id.watched_button);
     }
 
     public void onUnwatchedButtonTapped(View view) {
         flingContainer.getTopCardListener().selectLeft();
-        Button button = (Button)findViewById(R.id.unwatched_button);
-        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
-        button.startAnimation(myAnim);
+        Button button = findViewById(R.id.unwatched_button);
     }
 
     public void onSavedButtonTapped(View view) {
 
-        Button button = (Button)findViewById(R.id.save_button);
-        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
-        button.startAnimation(myAnim);
+        Button button = findViewById(R.id.save_button);
     }
 }

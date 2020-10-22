@@ -23,8 +23,8 @@ public class MovieCardsAdapter extends ArrayAdapter<MovieCard> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_card, parent, false);
         }
-        TextView title = (TextView) convertView.findViewById(R.id.title);
-        ImageView image = (ImageView) convertView.findViewById(R.id.movieImageView);
+        TextView title = convertView.findViewById(R.id.title);
+        ImageView image = convertView.findViewById(R.id.movieImageView);
         title.setText(movieCardItem.getMovieTitle());
         image.setImageResource(R.mipmap.ic_launcher);
         return convertView;
