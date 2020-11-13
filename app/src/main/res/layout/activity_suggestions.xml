@@ -21,7 +21,7 @@
         android:id="@+id/topbar_suggestions"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/gradient"
+        android:background="@drawable/topbar_grad"
         android:elevation="4dp">
 
         <TextView
