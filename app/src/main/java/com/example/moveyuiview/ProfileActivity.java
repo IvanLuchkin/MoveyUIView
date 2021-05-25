@@ -16,32 +16,29 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
         BottomNavigationView navView = findViewById(R.id.bot_nav);
-        navView.setSelectedItemId(R.id.profile);
-
+        setNavigationBarState(navView,R.id.profile);
         Toolbar myToolbar = findViewById(R.id.topbar_profile);
         setSupportActionBar(myToolbar);
+    }
 
+    private void setNavigationBarState(BottomNavigationView navView, int currentButtonId) {
+        navView.setSelectedItemId(currentButtonId);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.news :
-                        startActivity(new Intent(getApplicationContext(), NewsActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.profile :
-                        /*
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                        overridePendingTransition(0, 0);
-                         */
-                        return true;
-                    case R.id.suggestions :
-                        startActivity(new Intent(getApplicationContext(), SuggestionsActivity.class));
-                        overridePendingTransition(0, 0);
-
-                        return true;
+                if (item.getItemId() == R.id.news) {
+                    startActivity(new Intent(getApplicationContext(), NewsActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                } else if (item.getItemId() == R.id.profile) {
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                } else if (item.getItemId() == R.id.suggestions) {
+                    startActivity(new Intent(getApplicationContext(), SuggestionsActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
                 }
                 return false;
             }

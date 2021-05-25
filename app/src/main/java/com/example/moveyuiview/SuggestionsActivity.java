@@ -1,5 +1,6 @@
 package com.example.moveyuiview;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -31,30 +32,7 @@ public class SuggestionsActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         BottomNavigationView navView = findViewById(R.id.bot_nav);
-        navView.setSelectedItemId(R.id.suggestions);
-
-        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.news :
-                        startActivity(new Intent(getApplicationContext(), NewsActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.profile :
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.suggestions :
-                       /*
-                        startActivity(new Intent(getApplicationContext(), SuggestionsActivity.class));
-                        overridePendingTransition(0, 0);
-                        */
-                        return true;
-                }
-                return false;
-            }
-        });
+        setNavigationBarState(navView,R.id.suggestions);
 
         flingContainer = findViewById(R.id.frame);
 
@@ -126,5 +104,27 @@ public class SuggestionsActivity extends AppCompatActivity {
     public void onSavedButtonTapped(View view) {
 
         Button button = findViewById(R.id.save_button);
+    }
+    private void setNavigationBarState(BottomNavigationView navView, int currentButtonId) {
+        navView.setSelectedItemId(currentButtonId);
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.news) {
+                    startActivity(new Intent(getApplicationContext(), NewsActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                } else if (item.getItemId() == R.id.profile) {
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                } else if (item.getItemId() == R.id.suggestions) {
+                    startActivity(new Intent(getApplicationContext(), SuggestionsActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }

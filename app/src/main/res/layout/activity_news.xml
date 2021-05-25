@@ -30,9 +30,9 @@
 
     <com.mindorks.placeholderview.InfinitePlaceHolderView
         android:id="@+id/loadMoreView"
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="620dp" />
+        android:layout_height="620dp"
+        android:layout_marginTop="?attr/actionBarSize" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bot_nav"
