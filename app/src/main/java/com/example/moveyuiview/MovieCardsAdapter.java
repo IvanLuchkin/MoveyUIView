@@ -17,7 +17,7 @@ public class MovieCardsAdapter extends ArrayAdapter<MovieCard> {
     public MovieCardsAdapter(Context context, int resourceID, List<MovieCard> items) {
         super(context, resourceID, items);
     }
-
+    @Override
     public View getView(int position, View convertView, ViewGroup parent){
         MovieCard movieCardItem = getItem(position);
         if (convertView == null) {

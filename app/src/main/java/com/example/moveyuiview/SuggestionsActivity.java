@@ -76,7 +76,6 @@ public class SuggestionsActivity extends AppCompatActivity {
                 View view = flingContainer.getSelectedView();
                 view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
                 view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
-
                  */
             }
         });
@@ -105,6 +104,7 @@ public class SuggestionsActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.save_button);
     }
+
     private void setNavigationBarState(BottomNavigationView navView, int currentButtonId) {
         navView.setSelectedItemId(currentButtonId);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

@@ -5,17 +5,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private TextView usernameField;
+    private TextView username;
+    private SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        prefs = getSharedPreferences("Credentials",MODE_PRIVATE);
+        usernameField = findViewById(R.id.profile_username);
+        username = findViewById(R.id.profile_user);
+        username.setText(prefs.getString("username","noname"));
         BottomNavigationView navView = findViewById(R.id.bot_nav);
         setNavigationBarState(navView,R.id.profile);
         Toolbar myToolbar = findViewById(R.id.topbar_profile);
