@@ -23,6 +23,7 @@ public class SuggestionsActivity extends AppCompatActivity {
     private MovieCardsAdapter adapter;
     SwipeFlingAdapterView flingContainer;
     List<MovieCard> rowItems;
+    private int movieLimitInStack = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public class SuggestionsActivity extends AppCompatActivity {
         rowItems = new ArrayList<>();
         rowItems.add(new MovieCard("Forrest Gump"));
         rowItems.add(new MovieCard("The Matrix"));
+        rowItems.add(new MovieCard("Shrek"));
+        rowItems.add(new MovieCard("Shrek 2"));
 
         adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
 
@@ -67,7 +70,8 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-
+                rowItems.add(new MovieCard("Forrest Gump"));
+                rowItems.add(new MovieCard("The Matrix"));
             }
 
             @Override
@@ -90,10 +94,6 @@ public class SuggestionsActivity extends AppCompatActivity {
 
     }
 
-    public void onWatchedButtonTapped(View view) {
-        flingContainer.getTopCardListener().selectRight();
-        Button button = findViewById(R.id.watched_button);
-    }
 
     public void onUnwatchedButtonTapped(View view) {
         flingContainer.getTopCardListener().selectLeft();

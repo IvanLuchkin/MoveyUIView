@@ -8,14 +8,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView usernameField;
     private TextView username;
+    private Button logout;
     private SharedPreferences prefs;
 
     @Override
@@ -23,9 +25,15 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         prefs = getSharedPreferences("Credentials",MODE_PRIVATE);
-        usernameField = findViewById(R.id.profile_username);
         username = findViewById(R.id.profile_user);
         username.setText(prefs.getString("username","noname"));
+        logout = findViewById(R.id.logout_button);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
         BottomNavigationView navView = findViewById(R.id.bot_nav);
         setNavigationBarState(navView,R.id.profile);
         Toolbar myToolbar = findViewById(R.id.topbar_profile);
@@ -53,5 +61,16 @@ public class ProfileActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void removeCurrentUserContext(){
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.remove("username");
+        edit.apply();
+    }
+
+    private void logout(){
+        removeCurrentUserContext();
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
 }
