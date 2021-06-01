@@ -51,10 +51,10 @@ public class SuggestionsActivity extends AppCompatActivity {
 
         rowItems = new ArrayList<>();
         rowItems.add(new MovieCard("Forrest Gump","https://th.bing.com/th/id/OIP.qlrcwiYmltzto3NOc14z7wHaHb?pid=ImgDet&rs=1"));
-        rowItems.add(new MovieCard("The Matrix","https://www.pexels.com/photo/gray-and-yellow-gravel-stones-997704/"));
-        rowItems.add(new MovieCard("Shrek","https://images.pexels.com/photos/326612/pexels-photo-326612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"));
+        rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
+        rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
         rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
-        rowItems.add(new MovieCard("Shrek 3","https://www.bing.com/images/search?view=detailV2&ccid=QedWA29B&id=84D03F58BD78162B36F28DB3C105C7D0AD590062&thid=OIP.QedWA29BAcGzpBIx6hQzJQAAAA&mediaurl=https%3a%2f%2fzvukogram.com%2fupload%2fcimg-1-1610623877.jpg&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR41e756036f4101c1b3a41231ea143325%3frik%3dYgBZrdDHBcGzjQ%26pid%3dImgRaw&exph=290&expw=300&q=%d0%b3%d0%b0%d1%87%d0%b8+&simid=607988071527360316&ck=E51EE497CA0D57011885B69B5C0CD50C&selectedIndex=1&FORM=IRPRST&ajaxhist=0&ajaxserp=0"));
+        rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
 
         adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
 
@@ -83,8 +83,8 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                rowItems.add(new MovieCard("Forrest Gump","https://placekitten.com/g/200/300"));
-                rowItems.add(new MovieCard("The Matrix","https://placekitten.com/g/200/300"));
+                rowItems.add(new MovieCard("Forrest Gump","https://th.bing.com/th/id/OIP.qlrcwiYmltzto3NOc14z7wHaHb?pid=ImgDet&rs=1"));
+                rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
             }
 
             @Override
