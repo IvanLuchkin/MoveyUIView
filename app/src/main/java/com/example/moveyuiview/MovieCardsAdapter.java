@@ -49,8 +49,10 @@ public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
         TextView releaseYear = convertView.findViewById(R.id.year);
         genre.setText("Some genre,Drama");
         releaseYear.setText("2001");
-        LoadImage(movieCardItem.poster_path, image);
-        title.setText(movieCardItem.title);
+        //LoadImage(movieCardItem.poster_path, image);
+        LoadImage("https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg", image);
+        //title.setText(movieCardItem.title);
+        title.setText("movieCardItem.title");
         return convertView;
     }
 

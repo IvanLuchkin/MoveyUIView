@@ -32,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button logout;
     private ImageView userImage;
     private SharedPreferences prefs;
-
+    private Button likedFilms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +43,19 @@ public class ProfileActivity extends AppCompatActivity {
         username.setText(prefs.getString("username","noname"));
         logout = findViewById(R.id.logout_button);
         userImage = findViewById(R.id.usr_image);
+        likedFilms = findViewById(R.id.liked_films);
         LoadImage("https://zvukogram.com/upload/cimg-1-1610623877.jpg",userImage);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logout();
+            }
+        });
+        likedFilms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), LikedFilmsActivity.class));
+                overridePendingTransition(0, 0);
             }
         });
         BottomNavigationView navView = findViewById(R.id.bot_nav);

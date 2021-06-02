@@ -67,14 +67,16 @@ public class SuggestionsActivity extends AppCompatActivity {
         flingContainer = findViewById(R.id.frame);
 
         rowItems = new ArrayList<>();
-        final RequestQueue queue = Volley.newRequestQueue(this);
-        fetchMovies(adapter, queue);
+       // final RequestQueue queue = Volley.newRequestQueue(this);
+       // fetchMovies(adapter, queue);
 
-//        rowItems.add(new MovieCard("Forrest Gump","https://th.bing.com/th/id/OIP.qlrcwiYmltzto3NOc14z7wHaHb?pid=ImgDet&rs=1"));
-//        rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
-//        rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
-//        rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
-//        rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
+        rowItems.add(new BaseMovie());
+        rowItems.add(new BaseMovie());
+        rowItems.add(new BaseMovie());
+        //rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
+       // rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
+       // rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
+       // rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
 
         adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
 
@@ -100,7 +102,7 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                fetchMovies(adapter, queue);
+                //fetchMovies(adapter, queue);
             }
 
             @Override
@@ -132,6 +134,11 @@ public class SuggestionsActivity extends AppCompatActivity {
     public void onUnwatchedButtonTapped(View view) {
         flingContainer.getTopCardListener().selectLeft();
         Button button = findViewById(R.id.unwatched_button);
+    }
+
+    public void onWatchedButtonTapped(View view) {
+        flingContainer.getTopCardListener().selectRight();
+        Button button = findViewById(R.id.watched_button);
     }
 
     public void onSavedButtonTapped(View view) {
