@@ -35,8 +35,15 @@ public class ItemView {
     @Resolve
     private void onResolved() {
         titleTxt.setText(mInfo.getTitle());
-        captionTxt.setText(mInfo.getCaption());
+        captionTxt.setText(mInfo.getDescription());
         timeTxt.setText(mInfo.getTime());
+        imageView.setClickable(true);
+        imageView.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                System.out.println("Mis`e , dobrui den`");
+            }
+        });
         Glide.with(mContext).load(mInfo.getImageUrl()).into(imageView);
     }
 }

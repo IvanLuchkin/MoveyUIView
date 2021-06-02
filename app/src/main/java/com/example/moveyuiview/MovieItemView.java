@@ -35,7 +35,7 @@ public class MovieItemView {
     @Resolve
     private void onResolved() {
         titleTxt.setText(mInfo.getTitle());
-        captionTxt.setText(mInfo.getCaption());
+        captionTxt.setText(mInfo.getDescription());
         timeTxt.setText(mInfo.getTime());
         Glide.with(mContext).load(mInfo.getImageUrl()).into(imageView);
     }
