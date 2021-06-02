@@ -17,23 +17,40 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
+import com.uwetrottmann.tmdb2.entities.BaseMovie;
+import com.uwetrottmann.tmdb2.entities.Movie;
+import com.uwetrottmann.tmdb2.entities.MovieResultsPage;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class SuggestionsActivity extends AppCompatActivity {
 
     private MovieCardsAdapter adapter;
     SwipeFlingAdapterView flingContainer;
-    List<MovieCard> rowItems;
+    List<BaseMovie> rowItems;
     private int movieLimitInStack = 2;
 
     @Override
@@ -50,11 +67,14 @@ public class SuggestionsActivity extends AppCompatActivity {
         flingContainer = findViewById(R.id.frame);
 
         rowItems = new ArrayList<>();
-        rowItems.add(new MovieCard("Forrest Gump","https://th.bing.com/th/id/OIP.qlrcwiYmltzto3NOc14z7wHaHb?pid=ImgDet&rs=1"));
-        rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
-        rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
-        rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
-        rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
+        final RequestQueue queue = Volley.newRequestQueue(this);
+        fetchMovies(adapter, queue);
+
+//        rowItems.add(new MovieCard("Forrest Gump","https://th.bing.com/th/id/OIP.qlrcwiYmltzto3NOc14z7wHaHb?pid=ImgDet&rs=1"));
+//        rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
+//        rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
+//        rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
+//        rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
 
         adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
 
@@ -70,9 +90,6 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                //Do something on the left!
-                //You also have access to the original object.
-                //If you want to use it just cast it (String) dataObject
                 Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
             }
 
@@ -83,17 +100,12 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                rowItems.add(new MovieCard("Forrest Gump","https://th.bing.com/th/id/OIP.qlrcwiYmltzto3NOc14z7wHaHb?pid=ImgDet&rs=1"));
-                rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
+                fetchMovies(adapter, queue);
             }
 
             @Override
             public void onScroll(float scrollProgressPercent) {
-                /*
-                View view = flingContainer.getSelectedView();
-                view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-                view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
-                 */
+
             }
         });
 
@@ -102,6 +114,15 @@ public class SuggestionsActivity extends AppCompatActivity {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
                 Toast.makeText(SuggestionsActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+                rowItems.remove(0);
+                try {
+                    Field privateField = SwipeFlingAdapterView.class.getDeclaredField("mActiveCard");
+                    privateField.setAccessible(true);
+                    privateField.set(flingContainer, null);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -139,6 +160,28 @@ public class SuggestionsActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void fetchMovies(final MovieCardsAdapter adapter, RequestQueue queue) {
+        String url ="http://192.168.49.2:80/movie/fetch";
+        JsonObjectRequest stringRequest = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        System.err.println(response.toString());
+                        try {
+                            adapter.addAll(new ObjectMapper().readValue(response.toString(), MovieResultsPage.class).results);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error!!!!!!!!!!!!" + error.getMessage());
+            }
+        });
+        queue.add(stringRequest);
     }
 
     public static void LoadImage(String url, ImageView imageView){

@@ -1,5 +1,6 @@
 package com.example.moveyuiview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.uwetrottmann.tmdb2.entities.BaseMovie;
+import com.uwetrottmann.tmdb2.entities.Movie;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,24 +27,30 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MovieCardsAdapter extends ArrayAdapter<MovieCard> {
+public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
 
     Context context;
     Bitmap bitmap;
 
-    public MovieCardsAdapter(Context context, int resourceID, List<MovieCard> items) {
+    public MovieCardsAdapter(Context context, int resourceID, List<BaseMovie> items) {
         super(context, resourceID, items);
     }
+
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        MovieCard movieCardItem = getItem(position);
+        BaseMovie movieCardItem = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_card, parent, false);
         }
         TextView title = convertView.findViewById(R.id.title);
         ImageView image = convertView.findViewById(R.id.movieImageView);
-        LoadImage(movieCardItem.getImageUrl(),image);
-        title.setText(movieCardItem.getMovieTitle());
+        TextView genre = convertView.findViewById(R.id.genre);
+        TextView releaseYear = convertView.findViewById(R.id.year);
+        genre.setText("Some genre,Drama");
+        releaseYear.setText("2001");
+        LoadImage(movieCardItem.poster_path, image);
+        title.setText(movieCardItem.title);
         return convertView;
     }
 

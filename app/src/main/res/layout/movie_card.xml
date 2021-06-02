@@ -16,60 +16,102 @@
         android:layout_gravity="center|top"
         android:elevation="4dp">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                tools:text="sample text" />
-
-            <ImageView
-                android:id="@+id/movieImageView"
-                android:layout_width="285dp"
-                android:layout_height="392dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                android:contentDescription="@string/movie_title"
-                app:srcCompat="@drawable/ic_launcher_background" />
-
-            <Button
-                android:id="@+id/watched_button"
-                android:layout_width="50dp"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:onClick="onWatchedButtonTapped"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_thumb_up_alt_black_18dp" />
-
-            <Button
-                android:id="@+id/save_button"
-                android:layout_width="50dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:onClick="onSavedButtonTapped"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_watch_later_black_18dp" />
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/unwatched_button"
                 android:layout_width="50dp"
-                android:layout_gravity="bottom|start"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:onClick="onUnwatchedButtonTapped"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_thumb_down_alt_black_18dp" />
+                android:layout_gravity="bottom|start"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/ic_thumb_down_alt_black_18dp"
+                android:onClick="onUnwatchedButtonTapped"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.165"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </FrameLayout>
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="275dp"
+                android:layout_height="26dp"
+                android:layout_marginBottom="48dp"
+                android:text="Дневник вампиров 2020"
+                android:textSize="17.5sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/save_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.291"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="16dp"
+                android:text="GachiMuchi , Drama"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toTopOf="@+id/unwatched_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2001"
+                android:textSize="15.5sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.744"
+                app:layout_constraintStart_toEndOf="@+id/genre"
+                tools:layout_editor_absoluteY="430dp" />
+
+            <Button
+                android:id="@+id/watched_button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/ic_thumb_up_alt_black_18dp"
+                android:onClick="onWatchedButtonTapped"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.859"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/ic_watch_later_black_18dp"
+                android:onClick="onSavedButtonTapped"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/watched_button"
+                app:layout_constraintHorizontal_bias="0.463"
+                app:layout_constraintStart_toEndOf="@+id/unwatched_button" />
+
+            <ImageView
+                android:id="@+id/movieImageView"
+                android:layout_width="362dp"
+                android:layout_height="363dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:contentDescription="@string/movie_title"
+                app:layout_constraintBottom_toTopOf="@+id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.644"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_movie_black_18dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
