@@ -38,7 +38,7 @@ public class ItemView {
     private void onResolved() {
         titleTxt.setText(mInfo.title);
         captionTxt.setText(mInfo.overview);
-        timeTxt.setText((CharSequence) mInfo.release_date);
+        timeTxt.setText(mInfo.release_date == null ? "-" : mInfo.release_date.toString());
         imageView.setClickable(true);
         imageView.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
@@ -49,6 +49,6 @@ public class ItemView {
                 mContext.startActivity(intent);
             }
         });
-        Glide.with(mContext).load(mInfo.backdrop_path).into(imageView);
+        Glide.with(mContext).load(mInfo.poster_path).into(imageView);
     }
 }

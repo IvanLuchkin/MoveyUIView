@@ -53,7 +53,8 @@ public class LoadMoreReviews {
         public void run() {
             RequestFuture<JSONObject> requestFuture= RequestFuture.newFuture();
             try {
-                final String url = "http://192.168.49.2/review/322";
+                final String url = "http://192.168.49.2/review/" + CurrentContextHolder.getInstance().getLastKnownMovieId();
+                System.out.println(url);
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                         url, new JSONObject(), requestFuture, requestFuture);
                 ReviewsActivity.getmQueue().add(request);

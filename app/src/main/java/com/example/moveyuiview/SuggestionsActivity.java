@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,9 +29,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.uwetrottmann.tmdb2.entities.BaseMovie;
-import com.uwetrottmann.tmdb2.entities.Movie;
 import com.uwetrottmann.tmdb2.entities.MovieResultsPage;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -67,7 +68,6 @@ public class SuggestionsActivity extends AppCompatActivity {
 
         rowItems = new ArrayList<>();
         mQueue = Volley.newRequestQueue(this);
-        fetchMovies(adapter);
 
         //rowItems.add(new BaseMovie());
        // rowItems.add(new BaseMovie());
@@ -78,6 +78,7 @@ public class SuggestionsActivity extends AppCompatActivity {
         // rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
 
         adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
+        fetchMovies(adapter);
 
         flingContainer.setAdapter(adapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -93,14 +94,22 @@ public class SuggestionsActivity extends AppCompatActivity {
             public void onLeftCardExit(Object dataObject) {
                 //Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
                 CurrentContextHolder.getInstance().getCachedSavedMovies().add(rowItems.get(0));
-                saveSwipe(false, ((Movie) dataObject).id, rowItems.get(0));
+                try {
+                    saveSwipe(false, ((BaseMovie) dataObject).id, rowItems.get(0));
+                } catch (AuthFailureError | JSONException authFailureError) {
+                    authFailureError.printStackTrace();
+                }
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 //Toast.makeText(SuggestionsActivity.this, "right", Toast.LENGTH_SHORT).show();
                 CurrentContextHolder.getInstance().getCachedSavedMovies().add(rowItems.get(0));
-               saveSwipe(true, ((Movie) dataObject).id , rowItems.get(0));
+                try {
+                    saveSwipe(true, ((BaseMovie) dataObject).id , rowItems.get(0));
+                } catch (AuthFailureError | JSONException authFailureError) {
+                    authFailureError.printStackTrace();
+                }
             }
 
             @Override
@@ -204,13 +213,15 @@ public class SuggestionsActivity extends AppCompatActivity {
         mQueue.add(stringRequest);
     }
 
-    private void saveSwipe(final boolean liked, final Integer movieId,BaseMovie currentMovie) {
+    private void saveSwipe(final boolean liked, final Integer movieId, BaseMovie currentMovie) throws AuthFailureError, JSONException {
+        System.out.println("IDIDIDDIDIDIDIDIIDIDID" + movieId);
         final Integer userId = 1;
         String url = "http://192.168.49.2:80/notification/swipes";
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
+        JSONObject jsonBody = new JSONObject().put("userId", userId).put("movieId", movieId).put("liked", liked);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         Toast.makeText(SuggestionsActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
@@ -220,14 +231,14 @@ public class SuggestionsActivity extends AppCompatActivity {
             }
         }) {
             @Override
-            protected Map<String, String> getParams() {
+            public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put("userId", String.valueOf(userId));
-                params.put("movieId", String.valueOf(movieId));
-                params.put("liked", String.valueOf(liked));
+                params.put("Content-Type", "application/json");
                 return params;
             }
         };
+        System.out.println(request.getBody().toString());
+        System.out.println(request.getBodyContentType().toString());
         mQueue.add(request);
     }
 
