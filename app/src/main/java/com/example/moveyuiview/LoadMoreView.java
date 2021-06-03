@@ -7,6 +7,7 @@ import android.util.Log;
 import com.mindorks.placeholderview.InfinitePlaceHolderView;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.infinite.LoadMore;
+import com.uwetrottmann.tmdb2.entities.BaseMovie;
 
 import java.util.List;
 
@@ -16,9 +17,9 @@ public class LoadMoreView {
     public static final int LOAD_VIEW_SET_COUNT = 6;
 
     private final InfinitePlaceHolderView mLoadMoreView;
-    private final List<InfiniteFeedInfo> mFeedList;
+    private final List<BaseMovie> mFeedList;
 
-    public LoadMoreView(InfinitePlaceHolderView loadMoreView, List<InfiniteFeedInfo> feedList) {
+    public LoadMoreView(InfinitePlaceHolderView loadMoreView, List<BaseMovie> feedList) {
         this.mLoadMoreView = loadMoreView;
         this.mFeedList = feedList;
     }

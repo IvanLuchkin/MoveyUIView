@@ -69,9 +69,9 @@ public class SuggestionsActivity extends AppCompatActivity {
         mQueue = Volley.newRequestQueue(this);
         fetchMovies(adapter);
 
-//        rowItems.add(new BaseMovie());
-//        rowItems.add(new BaseMovie());
-//        rowItems.add(new BaseMovie());
+        //rowItems.add(new BaseMovie());
+       // rowItems.add(new BaseMovie());
+       // rowItems.add(new BaseMovie());
         //rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
         // rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
         // rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
@@ -92,13 +92,15 @@ public class SuggestionsActivity extends AppCompatActivity {
             @Override
             public void onLeftCardExit(Object dataObject) {
                 //Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
-                saveSwipe(false, ((Movie) dataObject).id);
+                CurrentContextHolder.getInstance().getCachedSavedMovies().add(rowItems.get(0));
+                saveSwipe(false, ((Movie) dataObject).id, rowItems.get(0));
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 //Toast.makeText(SuggestionsActivity.this, "right", Toast.LENGTH_SHORT).show();
-                saveSwipe(true, ((Movie) dataObject).id);
+                CurrentContextHolder.getInstance().getCachedSavedMovies().add(rowItems.get(0));
+               saveSwipe(true, ((Movie) dataObject).id , rowItems.get(0));
             }
 
             @Override
@@ -202,7 +204,7 @@ public class SuggestionsActivity extends AppCompatActivity {
         mQueue.add(stringRequest);
     }
 
-    private void saveSwipe(final boolean liked, final Integer movieId) {
+    private void saveSwipe(final boolean liked, final Integer movieId,BaseMovie currentMovie) {
         final Integer userId = 1;
         String url = "http://192.168.49.2:80/notification/swipes";
         StringRequest request = new StringRequest(Request.Method.POST, url,

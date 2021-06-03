@@ -1,13 +1,15 @@
 package com.example.moveyuiview;
 
+import com.uwetrottmann.tmdb2.entities.BaseMovie;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentContextHolder {
 
     private static CurrentContextHolder instance;
-    private List<InfiniteFeedInfo> feedList;
     private Integer lastKnownMovieId;
+    private List<BaseMovie> cachedSavedMovies = new ArrayList<>();
 
     private CurrentContextHolder(){}
 
@@ -15,7 +17,6 @@ public class CurrentContextHolder {
     public static CurrentContextHolder getInstance(){
         if(instance == null){
             instance = new CurrentContextHolder();
-            instance.feedList = new ArrayList<>();
             return instance;
         }else return instance;
     }
@@ -25,13 +26,6 @@ public class CurrentContextHolder {
     }
 
 
-    public List<InfiniteFeedInfo> getFeedList() {
-        return feedList;
-    }
-
-    public void setFeedList(List<InfiniteFeedInfo> feedList) {
-        this.feedList = feedList;
-    }
 
     public Integer getLastKnownMovieId() {
         return lastKnownMovieId;
@@ -39,5 +33,13 @@ public class CurrentContextHolder {
 
     public void setLastKnownMovieId(Integer lastKnownMovieId) {
         this.lastKnownMovieId = lastKnownMovieId;
+    }
+
+    public List<BaseMovie> getCachedSavedMovies() {
+        return cachedSavedMovies;
+    }
+
+    public void setCachedSavedMovies(List<BaseMovie> cachedSavedMovies) {
+        this.cachedSavedMovies = cachedSavedMovies;
     }
 }

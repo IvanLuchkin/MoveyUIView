@@ -8,15 +8,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mindorks.placeholderview.InfinitePlaceHolderView;
+import com.uwetrottmann.tmdb2.entities.BaseMovie;
 
 import java.util.List;
 
 public class NewsActivity extends AppCompatActivity {
 
     private InfinitePlaceHolderView mLoadMoreView;
+    private TextView noFilmsPlaceholder;
+    private static final String NO_FILMS = "No Films";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,7 @@ public class NewsActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.topbar_news);
         setSupportActionBar(myToolbar);
+        noFilmsPlaceholder = findViewById(R.id.no_saved_films);
 
         BottomNavigationView navView = findViewById(R.id.bot_nav);
         setNavigationBarState(navView,R.id.news);
@@ -35,13 +40,20 @@ public class NewsActivity extends AppCompatActivity {
 
     private void setupView(){
         Log.d("DEBUG", "LoadMoreView.LOAD_VIEW_SET_COUNT " + LoadMoreView.LOAD_VIEW_SET_COUNT);
-        List<InfiniteFeedInfo> feedList;
+        List<BaseMovie> feedList;
         if(CurrentContextHolder
-                .getInstance().getFeedList().size()!=0){
-            feedList = CurrentContextHolder.getInstance().getFeedList();
-        }else feedList = Utils.loadInfiniteFeeds(this.getApplicationContext());
-        CurrentContextHolder.getInstance().setFeedList(feedList);
-        for(int i = 0; i < LoadMoreView.LOAD_VIEW_SET_COUNT; i++){
+                .getInstance().getCachedSavedMovies().size()!=0){
+            feedList = CurrentContextHolder.getInstance().getCachedSavedMovies();
+        }else {
+            //Делаем фетч , если ничего нету то выводим NOFILMSl;
+            noFilmsPlaceholder.setText(NO_FILMS);
+            return;
+        }
+        int filmsMaxCount = 0;
+        if(feedList.size() < LoadMoreView.LOAD_VIEW_SET_COUNT){
+            filmsMaxCount = feedList.size();
+        }else filmsMaxCount = LoadMoreView.LOAD_VIEW_SET_COUNT;
+        for(int i = 0; i < filmsMaxCount; i++){
             mLoadMoreView.addView(new ItemView(this.getApplicationContext(), feedList.get(i)));
         }
         mLoadMoreView.setLoadMoreResolver(new LoadMoreView(mLoadMoreView, feedList));

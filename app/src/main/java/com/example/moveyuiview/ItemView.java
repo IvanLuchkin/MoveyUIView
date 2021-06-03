@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.Resolve;
 import com.mindorks.placeholderview.annotations.View;
+import com.uwetrottmann.tmdb2.entities.BaseMovie;
 
 @Layout(R.layout.load_more_item_view)
 public class ItemView {
@@ -25,29 +26,29 @@ public class ItemView {
     @View(R.id.newsImageView)
     private ImageView imageView;
 
-    private final InfiniteFeedInfo mInfo;
+    private final BaseMovie mInfo;
     private final Context mContext;
 
-    public ItemView(Context context, InfiniteFeedInfo info) {
+    public ItemView(Context context, BaseMovie info) {
         mContext = context;
         mInfo = info;
     }
 
     @Resolve
     private void onResolved() {
-        titleTxt.setText(mInfo.getTitle());
-        captionTxt.setText(mInfo.getDescription());
-        timeTxt.setText(mInfo.getTime());
+        titleTxt.setText(mInfo.title);
+        captionTxt.setText(mInfo.overview);
+        timeTxt.setText((CharSequence) mInfo.release_date);
         imageView.setClickable(true);
         imageView.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
-                CurrentContextHolder.getInstance().setLastKnownMovieId(mInfo.getMovieId());
+                CurrentContextHolder.getInstance().setLastKnownMovieId(mInfo.id);
                 Intent intent =new Intent(mContext,ReviewsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
             }
         });
-        Glide.with(mContext).load(mInfo.getImageUrl()).into(imageView);
+        Glide.with(mContext).load(mInfo.backdrop_path).into(imageView);
     }
 }
