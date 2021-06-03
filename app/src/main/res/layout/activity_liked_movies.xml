@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.mindorks.placeholderview.InfinitePlaceHolderView
-        android:id="@+id/loadMoreView"
+        android:id="@+id/loadReviewView"
         android:layout_width="380dp"
         android:layout_height="537dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -42,7 +42,7 @@ public class ItemView {
         imageView.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
-                System.out.println("Mis`e , dobrui den`");
+                CurrentContextHolder.getInstance().setLastKnownMovieId(mInfo.getMovieId());
                 Intent intent =new Intent(mContext,ReviewsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);

@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.Resolve;
 import com.mindorks.placeholderview.annotations.View;
+import com.uwetrottmann.tmdb2.entities.Review;
 
 @Layout(R.layout.review_copy)
 public class ReviewItemView {
@@ -21,19 +22,19 @@ public class ReviewItemView {
     @View(R.id.date)
     private TextView date;
 
-    private final ReviewInfo mInfo;
+    private final Review mInfo;
     private final Context mContext;
 
-    public ReviewItemView(Context context, ReviewInfo info) {
+    public ReviewItemView(Context context, Review review) {
         mContext = context;
-        mInfo = info;
+        mInfo = review;
     }
 
     @SuppressLint("SetTextI18n")
     @Resolve
     private void onResolved() {
-        username.setText("Yarik");
-        content.setText("Nice at all");
-        date.setText("06 April 2001");
+        username.setText(mInfo.author);
+        content.setText(mInfo.content);
+        date.setText(mInfo.iso_639_1);
     }
 }

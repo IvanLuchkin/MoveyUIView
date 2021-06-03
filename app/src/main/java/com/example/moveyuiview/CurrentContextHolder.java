@@ -7,6 +7,7 @@ public class CurrentContextHolder {
 
     private static CurrentContextHolder instance;
     private List<InfiniteFeedInfo> feedList;
+    private Integer lastKnownMovieId;
 
     private CurrentContextHolder(){}
 
@@ -30,5 +31,13 @@ public class CurrentContextHolder {
 
     public void setFeedList(List<InfiniteFeedInfo> feedList) {
         this.feedList = feedList;
+    }
+
+    public Integer getLastKnownMovieId() {
+        return lastKnownMovieId;
+    }
+
+    public void setLastKnownMovieId(Integer lastKnownMovieId) {
+        this.lastKnownMovieId = lastKnownMovieId;
     }
 }

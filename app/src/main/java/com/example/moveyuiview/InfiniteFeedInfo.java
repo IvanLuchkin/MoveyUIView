@@ -9,6 +9,8 @@ public class InfiniteFeedInfo {
     @Expose
     private String title;
 
+    private Integer movieId;
+
     @SerializedName("image_url")
     @Expose
     private String imageUrl;
@@ -51,5 +53,13 @@ public class InfiniteFeedInfo {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public Integer getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
     }
 }
