@@ -23,7 +23,7 @@ public class Utils {
         try {
             GsonBuilder builder = new GsonBuilder();
             Gson gson = builder.create();
-            JSONArray array = new JSONArray(loadJSONFromAsset(context));
+            JSONArray array = new JSONArray(loadJSONFromAsset(context,"news.json"));
             List<InfiniteFeedInfo> feedList = new ArrayList<>();
             for(int i = 0; i < array.length(); i++){
                 InfiniteFeedInfo feed = gson.fromJson(array.getString(i), InfiniteFeedInfo.class);
@@ -37,13 +37,31 @@ public class Utils {
         }
     }
 
-    private static String loadJSONFromAsset(Context context) {
+    public static List<ReviewInfo> loadInfiniteReviews(Context context){
+        try {
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            JSONArray array = new JSONArray(loadJSONFromAsset(context,"reviews.json"));
+            List<ReviewInfo> feedList = new ArrayList<>();
+            for(int i = 0; i < array.length(); i++){
+                ReviewInfo feed = gson.fromJson(array.getString(i), ReviewInfo.class);
+                feedList.add(feed);
+            }
+            return feedList;
+        }catch (Exception e){
+            Log.d(TAG,"seedGames parseException " + e);
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String loadJSONFromAsset(Context context,String jsonName) {
         String json = null;
         InputStream is = null;
         try {
             AssetManager manager = context.getAssets();
-            Log.d(TAG,"path "+ "news.json");
-            is = manager.open("news.json");
+            Log.d(TAG,"path "+ jsonName);
+            is = manager.open(jsonName);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

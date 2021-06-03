@@ -1,6 +1,7 @@
 package com.example.moveyuiview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,13 +13,13 @@ import com.mindorks.placeholderview.annotations.View;
 @Layout(R.layout.load_more_item_view)
 public class ItemView {
 
-    @View(R.id.newstitleText)
+    @View(R.id.username)
     private TextView titleTxt;
 
-    @View(R.id.newsCaptionText)
+    @View(R.id.comment)
     private TextView captionTxt;
 
-    @View(R.id.newsTimeText)
+    @View(R.id.date)
     private TextView timeTxt;
 
     @View(R.id.newsImageView)
@@ -42,6 +43,9 @@ public class ItemView {
             @Override
             public void onClick(android.view.View v) {
                 System.out.println("Mis`e , dobrui den`");
+                Intent intent =new Intent(mContext,ReviewsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
             }
         });
         Glide.with(mContext).load(mInfo.getImageUrl()).into(imageView);

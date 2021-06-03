@@ -12,13 +12,13 @@ import com.mindorks.placeholderview.annotations.View;
 @Layout(R.layout.load_more_view)
 public class MovieItemView {
 
-    @View(R.id.newstitleText)
+    @View(R.id.username)
     private TextView titleTxt;
 
-    @View(R.id.newsCaptionText)
+    @View(R.id.comment)
     private TextView captionTxt;
 
-    @View(R.id.newsTimeText)
+    @View(R.id.date)
     private TextView timeTxt;
 
     @View(R.id.newsImageView)

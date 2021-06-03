@@ -34,8 +34,12 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     private void setupView(){
-        List<InfiniteFeedInfo> feedList = Utils.loadInfiniteFeeds(this.getApplicationContext());
         Log.d("DEBUG", "LoadMoreView.LOAD_VIEW_SET_COUNT " + LoadMoreView.LOAD_VIEW_SET_COUNT);
+        List<InfiniteFeedInfo> feedList;
+        if(CurrentContextHolder.getInstance().getFeedList().size()!=0){
+            feedList = CurrentContextHolder.getInstance().getFeedList();
+        }else feedList = Utils.loadInfiniteFeeds(this.getApplicationContext());
+        CurrentContextHolder.getInstance().setFeedList(feedList);
         for(int i = 0; i < LoadMoreView.LOAD_VIEW_SET_COUNT; i++){
             mLoadMoreView.addView(new ItemView(this.getApplicationContext(), feedList.get(i)));
         }
