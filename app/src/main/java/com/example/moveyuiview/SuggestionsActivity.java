@@ -1,9 +1,5 @@
 package com.example.moveyuiview;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,20 +38,19 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 public class SuggestionsActivity extends AppCompatActivity {
 
     private MovieCardsAdapter adapter;
     SwipeFlingAdapterView flingContainer;
     List<BaseMovie> rowItems;
-    private int movieLimitInStack = 2;
+    private RequestQueue mQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +61,21 @@ public class SuggestionsActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         BottomNavigationView navView = findViewById(R.id.bot_nav);
-        setNavigationBarState(navView,R.id.suggestions);
+        setNavigationBarState(navView, R.id.suggestions);
 
         flingContainer = findViewById(R.id.frame);
 
         rowItems = new ArrayList<>();
-       // final RequestQueue queue = Volley.newRequestQueue(this);
-       // fetchMovies(adapter, queue);
+        mQueue = Volley.newRequestQueue(this);
+        fetchMovies(adapter);
 
-        rowItems.add(new BaseMovie());
-        rowItems.add(new BaseMovie());
-        rowItems.add(new BaseMovie());
+//        rowItems.add(new BaseMovie());
+//        rowItems.add(new BaseMovie());
+//        rowItems.add(new BaseMovie());
         //rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
-       // rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
-       // rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
-       // rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
+        // rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
+        // rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
+        // rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
 
         adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
 
@@ -92,17 +91,19 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
+                saveSwipe(false, ((Movie) dataObject).id);
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                Toast.makeText(SuggestionsActivity.this, "right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SuggestionsActivity.this, "right", Toast.LENGTH_SHORT).show();
+                saveSwipe(true, ((Movie) dataObject).id);
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                //fetchMovies(adapter, queue);
+                fetchMovies(adapter);
             }
 
             @Override
@@ -112,21 +113,21 @@ public class SuggestionsActivity extends AppCompatActivity {
         });
 
         // Optionally add an OnItemClickListener
-        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(SuggestionsActivity.this, "clicked", Toast.LENGTH_SHORT).show();
-                rowItems.remove(0);
-                try {
-                    Field privateField = SwipeFlingAdapterView.class.getDeclaredField("mActiveCard");
-                    privateField.setAccessible(true);
-                    privateField.set(flingContainer, null);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                adapter.notifyDataSetChanged();
-            }
-        });
+//        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClicked(int itemPosition, Object dataObject) {
+//                Toast.makeText(SuggestionsActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+//                rowItems.remove(0);
+//                try {
+//                    Field privateField = SwipeFlingAdapterView.class.getDeclaredField("mActiveCard");
+//                    privateField.setAccessible(true);
+//                    privateField.set(flingContainer, null);
+//                } catch (NoSuchFieldException | IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
 
     }
 
@@ -142,7 +143,17 @@ public class SuggestionsActivity extends AppCompatActivity {
     }
 
     public void onSavedButtonTapped(View view) {
-
+        //Toast.makeText(SuggestionsActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+        saveMovie(rowItems.get(0).id);
+        rowItems.remove(0);
+        try {
+            Field privateField = SwipeFlingAdapterView.class.getDeclaredField("mActiveCard");
+            privateField.setAccessible(true);
+            privateField.set(flingContainer, null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        adapter.notifyDataSetChanged();
         Button button = findViewById(R.id.save_button);
     }
 
@@ -169,8 +180,8 @@ public class SuggestionsActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchMovies(final MovieCardsAdapter adapter, RequestQueue queue) {
-        String url ="http://192.168.49.2:80/movie/fetch";
+    private void fetchMovies(final MovieCardsAdapter adapter) {
+        String url = "http://192.168.49.2:80/movie/fetch";
         JsonObjectRequest stringRequest = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -188,10 +199,55 @@ public class SuggestionsActivity extends AppCompatActivity {
                 System.out.println("Error!!!!!!!!!!!!" + error.getMessage());
             }
         });
-        queue.add(stringRequest);
+        mQueue.add(stringRequest);
     }
 
-    public static void LoadImage(String url, ImageView imageView){
+    private void saveSwipe(final boolean liked, final Integer movieId) {
+        final Integer userId = 1;
+        String url = "http://192.168.49.2:80/notification/swipes";
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(SuggestionsActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(SuggestionsActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("userId", String.valueOf(userId));
+                params.put("movieId", String.valueOf(movieId));
+                params.put("liked", String.valueOf(liked));
+                return params;
+            }
+        };
+        mQueue.add(request);
+    }
+
+    private void saveMovie(final Integer movieId) {
+        final Integer userId = 1;
+        String url = "http://192.168.49.2:80/notification/savings/" + userId + '/' + movieId;
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(SuggestionsActivity.this, "Added to 'Watch later'", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(SuggestionsActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mQueue.add(request);
+    }
+
+    public static void LoadImage(String url, ImageView imageView) {
         ImageViewHelper viewHelper = new ImageViewHelper();
         try {
             Bitmap bitmap = viewHelper.execute(url).get();
@@ -204,27 +260,27 @@ public class SuggestionsActivity extends AppCompatActivity {
         }
     }
 
-    public static class ImageViewHelper extends AsyncTask<String,Void, Bitmap> {
+    public static class ImageViewHelper extends AsyncTask<String, Void, Bitmap> {
 
         @Override
         protected Bitmap doInBackground(String... strings) {
             Bitmap bitmap = null;
-            URL url ;
+            URL url;
             HttpURLConnection httpURLConnection;
             InputStream inputStream;
 
-            try{
+            try {
                 url = new URL(strings[0]);
                 httpURLConnection = (HttpURLConnection) url.openConnection();
-                inputStream=httpURLConnection.getInputStream();
+                inputStream = httpURLConnection.getInputStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
 
-            }catch (MalformedURLException e) {
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return  bitmap;
+            return bitmap;
         }
     }
 

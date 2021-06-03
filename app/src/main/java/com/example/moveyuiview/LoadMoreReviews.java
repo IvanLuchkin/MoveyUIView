@@ -52,7 +52,6 @@ public class LoadMoreReviews {
         @Override
         public void run() {
             RequestFuture<JSONObject> requestFuture= RequestFuture.newFuture();
-            System.out.println("SOMETHING");
             try {
                 final String url = "http://192.168.49.2/review/322";
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
