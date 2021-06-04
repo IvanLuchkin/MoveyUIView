@@ -10,6 +10,8 @@ public class CurrentContextHolder {
     private static CurrentContextHolder instance;
     private Integer lastKnownMovieId;
     private List<BaseMovie> cachedSavedMovies = new ArrayList<>();
+    private List<BaseMovie> suggestionMoviesCache = new ArrayList<>();
+    private boolean isFirstTimeOpenedSuggestions = true;
 
     private CurrentContextHolder(){}
 
@@ -41,5 +43,21 @@ public class CurrentContextHolder {
 
     public void setCachedSavedMovies(List<BaseMovie> cachedSavedMovies) {
         this.cachedSavedMovies = cachedSavedMovies;
+    }
+
+    public List<BaseMovie> getSuggestionMoviesCache() {
+        return suggestionMoviesCache;
+    }
+
+    public void setSuggestionMoviesCache(List<BaseMovie> suggestionMoviesCache) {
+        this.suggestionMoviesCache = suggestionMoviesCache;
+    }
+
+    public  boolean isIsFirstTimeOpenedSuggestions() {
+        return isFirstTimeOpenedSuggestions;
+    }
+
+    public  void setIsFirstTimeOpenedSuggestions(boolean isFirstTimeOpenedSuggestions) {
+       this.isFirstTimeOpenedSuggestions = isFirstTimeOpenedSuggestions;
     }
 }

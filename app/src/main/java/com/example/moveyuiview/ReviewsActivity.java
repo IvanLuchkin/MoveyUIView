@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,6 +22,8 @@ public class ReviewsActivity extends AppCompatActivity {
         private InfinitePlaceHolderView mLoadMoreView;
         private Button backButton;
         private static RequestQueue mQueue;
+        private TextView noReviewsTextHolder;
+        private final String NO_REVIEWS= "No Reviews";
 
     public static RequestQueue getmQueue() {
         return mQueue;
@@ -31,6 +34,7 @@ public class ReviewsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_film_review);
             backButton = findViewById(R.id.back_to_liked_films);
+            noReviewsTextHolder = findViewById(R.id.no_reviews);
             backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -53,11 +57,11 @@ public class ReviewsActivity extends AppCompatActivity {
 //                mLoadMoreView.addView(new ReviewItemView(this.getApplicationContext(), feedList.get(i)));
 //            }
             LoadMoreReviews view = new LoadMoreReviews(mLoadMoreView, new ArrayList<Review>());
-            mLoadMoreView.setLoadMoreResolver(view);
-            view.onLoadMore();
-
+            if(mLoadMoreView.getViewCount()==0){
+                noReviewsTextHolder.setText(NO_REVIEWS);
+            }else {
+                mLoadMoreView.setLoadMoreResolver(view);
+                view.onLoadMore();
+            }
         }
-
-
-
 }

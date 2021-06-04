@@ -28,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 @Layout(R.layout.load_review_view)
 public class LoadMoreReviews {
     public static final int LOAD_VIEW_SET_COUNT = 6;
+    public static long ACTUAL_REVIES_COUNT;
 
     private final InfinitePlaceHolderView mLoadMoreView;
     private final List<Review> mFeedList;
@@ -68,6 +69,7 @@ public class LoadMoreReviews {
                 JSONObject object= requestFuture.get(1, TimeUnit.SECONDS);
                 System.out.println(object.toString());
                 mFeedList.addAll(new ObjectMapper().readValue(object.toString(), ReviewResultsPage.class).results);
+                ACTUAL_REVIES_COUNT = mFeedList.stream().count();
             } catch (InterruptedException | ExecutionException | TimeoutException | IOException e) {
                 e.printStackTrace();
             }

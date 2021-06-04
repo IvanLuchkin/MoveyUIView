@@ -1,6 +1,7 @@
 package com.example.moveyuiview;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -52,11 +53,15 @@ public class SuggestionsActivity extends AppCompatActivity {
     SwipeFlingAdapterView flingContainer;
     List<BaseMovie> rowItems;
     private RequestQueue mQueue;
+    private SharedPreferences preferences;
+    private static final String PREF_NAME = "Application";
+    private static final String KEY_FOR_FIRST_TIME_OPENING = "IsFirstTime";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggestions);
+
         Toolbar myToolbar = findViewById(R.id.topbar_suggestions);
         setSupportActionBar(myToolbar);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -67,18 +72,19 @@ public class SuggestionsActivity extends AppCompatActivity {
         flingContainer = findViewById(R.id.frame);
 
         rowItems = new ArrayList<>();
-        mQueue = Volley.newRequestQueue(this);
+         mQueue = Volley.newRequestQueue(this);
+        if(CurrentContextHolder.getInstance().isIsFirstTimeOpenedSuggestions()){
+//            rowItems.add(new BaseMovie());
+//            rowItems.add(new BaseMovie());
+//            rowItems.add(new BaseMovie());
+            adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
+            CurrentContextHolder.getInstance().setIsFirstTimeOpenedSuggestions(false);
+            fetchMovies(adapter);
+        } else  {
+            List<BaseMovie> movies = CurrentContextHolder.getInstance().getSuggestionMoviesCache();
+            adapter = new MovieCardsAdapter(this, R.layout.movie_card, movies);
+        }
 
-        //rowItems.add(new BaseMovie());
-       // rowItems.add(new BaseMovie());
-       // rowItems.add(new BaseMovie());
-        //rowItems.add(new MovieCard("The Matrix","https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg"));
-        // rowItems.add(new MovieCard("Shrek","https://www.shitpostbot.com/img/sourceimages/skintama-57d5903a4a3c4.jpeg"));
-        // rowItems.add(new MovieCard("Shrek 2","https://zvukogram.com/upload/cimg-1-1610623877.jpg"));
-        // rowItems.add(new MovieCard("Shrek 3","https://www.meme-arsenal.com/memes/657169b0e46e0f6bab53e79d4bc35438.jpg"));
-
-        adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
-        fetchMovies(adapter);
 
         flingContainer.setAdapter(adapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -88,12 +94,12 @@ public class SuggestionsActivity extends AppCompatActivity {
                 Log.d("LIST", "removed object!");
                 rowItems.remove(0);
                 adapter.notifyDataSetChanged();
+                updateSuggestionCacheMovies();
             }
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                //Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
-                CurrentContextHolder.getInstance().getCachedSavedMovies().add(rowItems.get(0));
+                Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
                 try {
                     saveSwipe(false, ((BaseMovie) dataObject).id, rowItems.get(0));
                 } catch (AuthFailureError | JSONException authFailureError) {
@@ -103,8 +109,7 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                //Toast.makeText(SuggestionsActivity.this, "right", Toast.LENGTH_SHORT).show();
-                CurrentContextHolder.getInstance().getCachedSavedMovies().add(rowItems.get(0));
+                Toast.makeText(SuggestionsActivity.this, "right", Toast.LENGTH_SHORT).show();
                 try {
                     saveSwipe(true, ((BaseMovie) dataObject).id , rowItems.get(0));
                 } catch (AuthFailureError | JSONException authFailureError) {
@@ -114,6 +119,8 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
+              //  rowItems.add(new BaseMovie());  //delete in prod
+               // rowItems.add(new BaseMovie());   //delete in prod
                 fetchMovies(adapter);
             }
 
@@ -154,7 +161,8 @@ public class SuggestionsActivity extends AppCompatActivity {
     }
 
     public void onSavedButtonTapped(View view) {
-        //Toast.makeText(SuggestionsActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(SuggestionsActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+        CurrentContextHolder.getInstance().getCachedSavedMovies().add(rowItems.get(0));
         saveMovie(rowItems.get(0).id);
         rowItems.remove(0);
         try {
@@ -166,6 +174,12 @@ public class SuggestionsActivity extends AppCompatActivity {
         }
         adapter.notifyDataSetChanged();
         Button button = findViewById(R.id.save_button);
+        updateSuggestionCacheMovies();
+    }
+
+    private void updateSuggestionCacheMovies(){
+        CurrentContextHolder.getInstance().getSuggestionMoviesCache().clear();
+        CurrentContextHolder.getInstance().getSuggestionMoviesCache().addAll(rowItems);
     }
 
     private void setNavigationBarState(BottomNavigationView navView, int currentButtonId) {
@@ -200,6 +214,7 @@ public class SuggestionsActivity extends AppCompatActivity {
                         System.err.println(response.toString());
                         try {
                             adapter.addAll(new ObjectMapper().readValue(response.toString(), MovieResultsPage.class).results);
+                            CurrentContextHolder.getInstance().getSuggestionMoviesCache().addAll(new ObjectMapper().readValue(response.toString(), MovieResultsPage.class).results);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

@@ -47,10 +47,11 @@ public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
         ImageView image = convertView.findViewById(R.id.movieImageView);
         TextView genre = convertView.findViewById(R.id.genre);
         TextView releaseYear = convertView.findViewById(R.id.year);
-        //genre.setText("Some genre,Drama");
+        //genre.setText("Some genre,Drama");  //comment
         releaseYear.setText(movieCardItem.release_date == null ? "-" : movieCardItem.release_date.toString());
         LoadImage(movieCardItem.poster_path, image);
-        //LoadImage("https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg", image);
+      //  LoadImage("https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg", image);
+       // releaseYear.setText((new String(String.valueOf(Math.random() * 1000))));
         title.setText(movieCardItem.title);
         //title.setText("movieCardItem.title");
         return convertView;

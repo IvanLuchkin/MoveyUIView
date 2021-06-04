@@ -44,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
         logout = findViewById(R.id.logout_button);
         userImage = findViewById(R.id.usr_image);
         likedFilms = findViewById(R.id.liked_films);
-        LoadImage("https://zvukogram.com/upload/cimg-1-1610623877.jpg",userImage);
+        LoadImage("http://cdn.onlinewebfonts.com/svg/img_227643.png",userImage);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

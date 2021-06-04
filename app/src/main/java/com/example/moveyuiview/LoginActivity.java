@@ -125,8 +125,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validate(String username, String password) {
-        login(username, password);
-        test();
+        //login(username, password);
+       // test();
         if (username.equalsIgnoreCase("admin")) {
             if (password.equalsIgnoreCase("admin")) {
                 SharedPreferences.Editor edit = prefs.edit();

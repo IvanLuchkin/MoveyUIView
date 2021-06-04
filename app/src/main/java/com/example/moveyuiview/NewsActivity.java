@@ -56,7 +56,7 @@ public class NewsActivity extends AppCompatActivity {
         for(int i = 0; i < filmsMaxCount; i++){
             mLoadMoreView.addView(new ItemView(this.getApplicationContext(), feedList.get(i)));
         }
-        mLoadMoreView.setLoadMoreResolver(new LoadMoreView(mLoadMoreView, feedList));
+        //mLoadMoreView.setLoadMoreResolver(new LoadMoreView(mLoadMoreView, feedList));
     }
 
     private void setNavigationBarState(BottomNavigationView navView, int currentButtonId){
