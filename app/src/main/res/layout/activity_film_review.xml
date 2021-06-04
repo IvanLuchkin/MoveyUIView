@@ -30,8 +30,10 @@
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="20dp"
+                tools:layout_editor_absoluteY="14dp" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -62,7 +64,6 @@
             android:id="@+id/no_reviews"
             android:layout_width="296dp"
             android:layout_height="192dp"
-            android:text="No Reviews"
             android:textAlignment="center"
             android:textSize="50sp"
             app:layout_constraintBottom_toBottomOf="@+id/loadReviewView"

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -72,17 +73,17 @@ public class SuggestionsActivity extends AppCompatActivity {
         flingContainer = findViewById(R.id.frame);
 
         rowItems = new ArrayList<>();
-         mQueue = Volley.newRequestQueue(this);
-        if(CurrentContextHolder.getInstance().isIsFirstTimeOpenedSuggestions()){
+        mQueue = Volley.newRequestQueue(this);
+        if (CurrentContextHolder.getInstance().isIsFirstTimeOpenedSuggestions()) {
 //            rowItems.add(new BaseMovie());
 //            rowItems.add(new BaseMovie());
 //            rowItems.add(new BaseMovie());
             adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
             CurrentContextHolder.getInstance().setIsFirstTimeOpenedSuggestions(false);
             fetchMovies(adapter);
-        } else  {
-            List<BaseMovie> movies = CurrentContextHolder.getInstance().getSuggestionMoviesCache();
-            adapter = new MovieCardsAdapter(this, R.layout.movie_card, movies);
+        } else {
+            rowItems = CurrentContextHolder.getInstance().getSuggestionMoviesCache();
+            adapter = new MovieCardsAdapter(this, R.layout.movie_card, rowItems);
         }
 
 
@@ -99,7 +100,7 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SuggestionsActivity.this, "left", Toast.LENGTH_SHORT).show();
                 try {
                     saveSwipe(false, ((BaseMovie) dataObject).id, rowItems.get(0));
                 } catch (AuthFailureError | JSONException authFailureError) {
@@ -109,9 +110,9 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                Toast.makeText(SuggestionsActivity.this, "right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SuggestionsActivity.this, "right", Toast.LENGTH_SHORT).show();
                 try {
-                    saveSwipe(true, ((BaseMovie) dataObject).id , rowItems.get(0));
+                    saveSwipe(true, ((BaseMovie) dataObject).id, rowItems.get(0));
                 } catch (AuthFailureError | JSONException authFailureError) {
                     authFailureError.printStackTrace();
                 }
@@ -119,8 +120,8 @@ public class SuggestionsActivity extends AppCompatActivity {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-              //  rowItems.add(new BaseMovie());  //delete in prod
-               // rowItems.add(new BaseMovie());   //delete in prod
+                //  rowItems.add(new BaseMovie());  //delete in prod
+                // rowItems.add(new BaseMovie());   //delete in prod
                 fetchMovies(adapter);
             }
 
@@ -149,6 +150,11 @@ public class SuggestionsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        overridePendingTransition(0, 0);
+    }
 
     public void onUnwatchedButtonTapped(View view) {
         flingContainer.getTopCardListener().selectLeft();
@@ -161,7 +167,7 @@ public class SuggestionsActivity extends AppCompatActivity {
     }
 
     public void onSavedButtonTapped(View view) {
-        Toast.makeText(SuggestionsActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(SuggestionsActivity.this, "clicked", Toast.LENGTH_SHORT).show();
         CurrentContextHolder.getInstance().getCachedSavedMovies().add(rowItems.get(0));
         saveMovie(rowItems.get(0).id);
         rowItems.remove(0);
@@ -177,7 +183,7 @@ public class SuggestionsActivity extends AppCompatActivity {
         updateSuggestionCacheMovies();
     }
 
-    private void updateSuggestionCacheMovies(){
+    private void updateSuggestionCacheMovies() {
         CurrentContextHolder.getInstance().getSuggestionMoviesCache().clear();
         CurrentContextHolder.getInstance().getSuggestionMoviesCache().addAll(rowItems);
     }
@@ -188,16 +194,21 @@ public class SuggestionsActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.news) {
-                    startActivity(new Intent(getApplicationContext(), NewsActivity.class));
+                    Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
+                    startActivity(intent);
                     overridePendingTransition(0, 0);
                     return true;
                 } else if (item.getItemId() == R.id.profile) {
-                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                    overridePendingTransition(0, 0);
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
                     return true;
                 } else if (item.getItemId() == R.id.suggestions) {
-                    startActivity(new Intent(getApplicationContext(), SuggestionsActivity.class));
-                    overridePendingTransition(0, 0);
+                    Intent intent = new Intent(getApplicationContext(), SuggestionsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
                     return true;
                 }
                 return false;
@@ -211,7 +222,6 @@ public class SuggestionsActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        System.err.println(response.toString());
                         try {
                             adapter.addAll(new ObjectMapper().readValue(response.toString(), MovieResultsPage.class).results);
                             CurrentContextHolder.getInstance().getSuggestionMoviesCache().addAll(new ObjectMapper().readValue(response.toString(), MovieResultsPage.class).results);
@@ -229,22 +239,21 @@ public class SuggestionsActivity extends AppCompatActivity {
     }
 
     private void saveSwipe(final boolean liked, final Integer movieId, BaseMovie currentMovie) throws AuthFailureError, JSONException {
-        System.out.println("IDIDIDDIDIDIDIDIIDIDID" + movieId);
         final Integer userId = 1;
         String url = "http://192.168.49.2:80/notification/swipes";
-        JSONObject jsonBody = new JSONObject().put("userId", userId).put("movieId", movieId).put("liked", liked);
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("userId", userId);
+        jsonBody.put("movieId", movieId);
+        jsonBody.put("liked", liked);
+        System.out.println(jsonBody.toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(SuggestionsActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
+                response -> Toast.makeText(SuggestionsActivity.this, "Saved!", Toast.LENGTH_SHORT).show(),
+                error -> Toast.makeText(SuggestionsActivity.this, "Error!", Toast.LENGTH_SHORT).show()) {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SuggestionsActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                return Response.success(null, null);
             }
-        }) {
+
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
@@ -252,8 +261,6 @@ public class SuggestionsActivity extends AppCompatActivity {
                 return params;
             }
         };
-        System.out.println(request.getBody().toString());
-        System.out.println(request.getBodyContentType().toString());
         mQueue.add(request);
     }
 
@@ -261,17 +268,8 @@ public class SuggestionsActivity extends AppCompatActivity {
         final Integer userId = 1;
         String url = "http://192.168.49.2:80/notification/savings/" + userId + '/' + movieId;
         StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(SuggestionsActivity.this, "Added to 'Watch later'", Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SuggestionsActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                response -> Toast.makeText(SuggestionsActivity.this, "Added to 'Watch later'", Toast.LENGTH_SHORT).show(),
+                error -> Toast.makeText(SuggestionsActivity.this, "Error!", Toast.LENGTH_SHORT).show());
         mQueue.add(request);
     }
 

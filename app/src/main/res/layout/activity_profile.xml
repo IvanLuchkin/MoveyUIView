@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Profile"
-            android:textSize="48sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -52,8 +52,10 @@
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="20dp"
+                tools:layout_editor_absoluteY="14dp" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -64,10 +66,10 @@
             android:text="Username :"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.264"
+            app:layout_constraintHorizontal_bias="0.382"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.443" />
+            app:layout_constraintVertical_bias="0.442" />
 
         <TextView
             android:id="@+id/profile_user"
@@ -84,6 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="80dp"
+            android:background="@drawable/circle_button"
             android:text="logout"
             app:layout_constraintBottom_toTopOf="@+id/bot_nav"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,16 +106,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3"
             app:srcCompat="@drawable/ic_person_black_18dp" />
 
-        <Button
-            android:id="@+id/liked_films"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="164dp"
-            android:text="Liked Films"
-            app:layout_constraintBottom_toTopOf="@+id/bot_nav"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

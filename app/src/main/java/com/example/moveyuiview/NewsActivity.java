@@ -1,14 +1,12 @@
 package com.example.moveyuiview;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mindorks.placeholderview.InfinitePlaceHolderView;
@@ -32,54 +30,62 @@ public class NewsActivity extends AppCompatActivity {
         noFilmsPlaceholder = findViewById(R.id.no_saved_films);
 
         BottomNavigationView navView = findViewById(R.id.bot_nav);
-        setNavigationBarState(navView,R.id.news);
+        setNavigationBarState(navView, R.id.news);
 
         mLoadMoreView = findViewById(R.id.loadMoreView);
         setupView();
     }
 
-    private void setupView(){
+    private void setupView() {
         Log.d("DEBUG", "LoadMoreView.LOAD_VIEW_SET_COUNT " + LoadMoreView.LOAD_VIEW_SET_COUNT);
         List<BaseMovie> feedList;
-        if(CurrentContextHolder
-                .getInstance().getCachedSavedMovies().size()!=0){
+        if (CurrentContextHolder
+                .getInstance().getCachedSavedMovies().size() != 0) {
             feedList = CurrentContextHolder.getInstance().getCachedSavedMovies();
-        }else {
+        } else {
             //Делаем фетч , если ничего нету то выводим NOFILMSl;
             noFilmsPlaceholder.setText(NO_FILMS);
             return;
         }
         int filmsMaxCount = 0;
-        if(feedList.size() < LoadMoreView.LOAD_VIEW_SET_COUNT){
+        if (feedList.size() < LoadMoreView.LOAD_VIEW_SET_COUNT) {
             filmsMaxCount = feedList.size();
-        }else filmsMaxCount = LoadMoreView.LOAD_VIEW_SET_COUNT;
-        for(int i = 0; i < filmsMaxCount; i++){
-            mLoadMoreView.addView(new ItemView(this.getApplicationContext(), feedList.get(i)));
+        } else filmsMaxCount = LoadMoreView.LOAD_VIEW_SET_COUNT;
+        for (int i = 0; i < filmsMaxCount; i++) {
+            mLoadMoreView.addView(new MovieItemView(this.getApplicationContext(), feedList.get(i)));
         }
         //mLoadMoreView.setLoadMoreResolver(new LoadMoreView(mLoadMoreView, feedList));
     }
 
-    private void setNavigationBarState(BottomNavigationView navView, int currentButtonId){
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        overridePendingTransition(0, 0);
+    }
+
+    private void setNavigationBarState(BottomNavigationView navView, int currentButtonId) {
         navView.setSelectedItemId(currentButtonId);
 
-        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId()==R.id.news){
-                    startActivity(new Intent(getApplicationContext(), NewsActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-                }else if(item.getItemId()==R.id.profile){
-                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-                }else if(item.getItemId()==R.id.suggestions){
-                    startActivity(new Intent(getApplicationContext(), SuggestionsActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-                }
-                return false;
+        navView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.news) {
+                Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.profile) {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                return true;
+            } else if (item.getItemId() == R.id.suggestions) {
+                Intent intent = new Intent(getApplicationContext(), SuggestionsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                return true;
             }
+            return false;
         });
     }
 }

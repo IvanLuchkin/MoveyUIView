@@ -2,7 +2,7 @@
     <string name="app_name">Movey</string>
     <string name="todo">TODO</string>
     <string name="movie_title">movie_title</string>
-    <string name="news">News</string>
+    <string name="news">Watch later</string>
     <string name="suggestions">Suggestions</string>
     <string name="profile">Profile</string>
 </resources>

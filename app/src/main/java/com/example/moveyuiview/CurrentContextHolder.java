@@ -13,20 +13,20 @@ public class CurrentContextHolder {
     private List<BaseMovie> suggestionMoviesCache = new ArrayList<>();
     private boolean isFirstTimeOpenedSuggestions = true;
 
-    private CurrentContextHolder(){}
+    private CurrentContextHolder() {
+    }
 
 
-    public static CurrentContextHolder getInstance(){
-        if(instance == null){
+    public static CurrentContextHolder getInstance() {
+        if (instance == null) {
             instance = new CurrentContextHolder();
             return instance;
-        }else return instance;
+        } else return instance;
     }
 
-    public void showMessage(){
+    public void showMessage() {
         System.out.println("Hello World!");
     }
-
 
 
     public Integer getLastKnownMovieId() {
@@ -53,11 +53,11 @@ public class CurrentContextHolder {
         this.suggestionMoviesCache = suggestionMoviesCache;
     }
 
-    public  boolean isIsFirstTimeOpenedSuggestions() {
+    public boolean isIsFirstTimeOpenedSuggestions() {
         return isFirstTimeOpenedSuggestions;
     }
 
-    public  void setIsFirstTimeOpenedSuggestions(boolean isFirstTimeOpenedSuggestions) {
-       this.isFirstTimeOpenedSuggestions = isFirstTimeOpenedSuggestions;
+    public void setIsFirstTimeOpenedSuggestions(boolean isFirstTimeOpenedSuggestions) {
+        this.isFirstTimeOpenedSuggestions = isFirstTimeOpenedSuggestions;
     }
 }

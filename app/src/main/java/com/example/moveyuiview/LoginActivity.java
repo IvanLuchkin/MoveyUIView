@@ -17,16 +17,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONObject;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.net.CookieStore;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         confirmLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validate((username.getText().toString()),password.getText().toString());
+                validate((username.getText().toString()), password.getText().toString());
             }
         });
 
@@ -91,26 +87,27 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse response = error.networkResponse;
-                Log.i("response",response.headers.toString());
+                Log.i("response", response.headers.toString());
                 Map<String, String> responseHeaders = response.headers;
                 String rawCookies = responseHeaders.get("Set-Cookie");
-                Log.i("cookies",rawCookies);
+                Log.i("cookies", rawCookies);
                 Toast.makeText(LoginActivity.this, "Error!", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                Log.i("response",response.headers.toString());
+                Log.i("response", response.headers.toString());
                 Map<String, String> responseHeaders = response.headers;
                 String rawCookies = responseHeaders.get("Set-Cookie");
-                Log.i("cookies",rawCookies);
+                Log.i("cookies", rawCookies);
                 return super.parseNetworkResponse(response);
             }
+
             @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<>();
-                params.put("username",username);
-                params.put("password",password);
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
                 return params;
             }
 
@@ -126,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validate(String username, String password) {
         //login(username, password);
-       // test();
+        // test();
         if (username.equalsIgnoreCase("admin")) {
             if (password.equalsIgnoreCase("admin")) {
                 SharedPreferences.Editor edit = prefs.edit();

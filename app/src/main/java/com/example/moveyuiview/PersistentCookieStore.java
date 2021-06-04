@@ -39,8 +39,8 @@ public class PersistentCookieStore implements CookieStore {
      */
     private final static String PREF_SESSION_COOKIE = "session_cookie";
 
-    private CookieStore mStore;
-    private Context mContext;
+    private final CookieStore mStore;
+    private final Context mContext;
 
     /**
      * @param context The application context

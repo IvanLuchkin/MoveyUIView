@@ -25,12 +25,12 @@ public class LoadMoreView {
     }
 
     @LoadMore
-    private void onLoadMore(){
+    private void onLoadMore() {
         Log.d("DEBUG", "onLoadMore");
         new ForcedWaitedLoading();
     }
 
-    class ForcedWaitedLoading implements Runnable{
+    class ForcedWaitedLoading implements Runnable {
 
         public ForcedWaitedLoading() {
             new Thread(this).start();
@@ -41,7 +41,7 @@ public class LoadMoreView {
 
             try {
                 Thread.currentThread().sleep(2000);
-            }catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -52,9 +52,9 @@ public class LoadMoreView {
                     for (int i = count - 1;
                          i < (count - 1 + LoadMoreView.LOAD_VIEW_SET_COUNT) && mFeedList.size() > i;
                          i++) {
-                        mLoadMoreView.addView(new ItemView(mLoadMoreView.getContext(), mFeedList.get(i)));
+                        mLoadMoreView.addView(new MovieItemView(mLoadMoreView.getContext(), mFeedList.get(i)));
 
-                        if(i == mFeedList.size() - 1){
+                        if (i == mFeedList.size() - 1) {
                             mLoadMoreView.noMoreToLoad();
                             break;
                         }

@@ -11,13 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
 import com.uwetrottmann.tmdb2.entities.BaseMovie;
-import com.uwetrottmann.tmdb2.entities.Movie;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +33,7 @@ public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         BaseMovie movieCardItem = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_card, parent, false);
@@ -50,14 +45,14 @@ public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
         //genre.setText("Some genre,Drama");  //comment
         releaseYear.setText(movieCardItem.release_date == null ? "-" : movieCardItem.release_date.toString());
         LoadImage(movieCardItem.poster_path, image);
-      //  LoadImage("https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg", image);
-       // releaseYear.setText((new String(String.valueOf(Math.random() * 1000))));
+        //  LoadImage("https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg", image);
+        // releaseYear.setText((new String(String.valueOf(Math.random() * 1000))));
         title.setText(movieCardItem.title);
         //title.setText("movieCardItem.title");
         return convertView;
     }
 
-    public static void LoadImage(String url, ImageView imageView){
+    public static void LoadImage(String url, ImageView imageView) {
         ImageViewHelper viewHelper = new ImageViewHelper();
         try {
             Bitmap bitmap = viewHelper.execute(url).get();
@@ -70,27 +65,27 @@ public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
         }
     }
 
-    public static class ImageViewHelper extends AsyncTask<String,Void, Bitmap> {
+    public static class ImageViewHelper extends AsyncTask<String, Void, Bitmap> {
 
         @Override
         protected Bitmap doInBackground(String... strings) {
             Bitmap bitmap = null;
-            URL url ;
+            URL url;
             HttpURLConnection httpURLConnection;
             InputStream inputStream;
 
-            try{
+            try {
                 url = new URL(strings[0]);
                 httpURLConnection = (HttpURLConnection) url.openConnection();
-                inputStream=httpURLConnection.getInputStream();
+                inputStream = httpURLConnection.getInputStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
 
-            }catch (MalformedURLException e) {
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return  bitmap;
+            return bitmap;
         }
     }
 
