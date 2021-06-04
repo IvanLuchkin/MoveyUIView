@@ -13,7 +13,6 @@
         android:fullBackupContent="true">
 
         <activity android:name=".WatchLaterActivity" />
-        <activity android:name=".LikedFilmsActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SuggestionsActivity"/>
         <activity android:name=".ReviewsActivity"/>

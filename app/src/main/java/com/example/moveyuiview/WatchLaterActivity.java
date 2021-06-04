@@ -8,10 +8,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mindorks.placeholderview.InfinitePlaceHolderView;
 import com.uwetrottmann.tmdb2.entities.BaseMovie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WatchLaterActivity extends AppCompatActivity {
@@ -19,6 +22,7 @@ public class WatchLaterActivity extends AppCompatActivity {
     private static final String NO_FILMS = "No Films";
     private InfinitePlaceHolderView mLoadMoreView;
     private TextView noFilmsPlaceholder;
+    private static RequestQueue mQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,7 @@ public class WatchLaterActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.topbar_news);
         setSupportActionBar(myToolbar);
+        mQueue = Volley.newRequestQueue(this);
         noFilmsPlaceholder = findViewById(R.id.no_saved_films);
 
         BottomNavigationView navView = findViewById(R.id.bot_nav);
@@ -38,23 +43,22 @@ public class WatchLaterActivity extends AppCompatActivity {
 
     private void setupView() {
         Log.d("DEBUG", "LoadMoreView.LOAD_VIEW_SET_COUNT " + SavedMoviesView.LOAD_VIEW_SET_COUNT);
-        List<BaseMovie> feedList;
+
+        List<BaseMovie> feedList = new ArrayList<>();
+        LoadMoreSavedMovies view = new LoadMoreSavedMovies(mLoadMoreView, feedList);
         if (CurrentContextHolder
                 .getInstance().getCachedSavedMovies().size() != 0) {
             feedList = CurrentContextHolder.getInstance().getCachedSavedMovies();
         } else {
-            //Делаем фетч , если ничего нету то выводим NOFILMSl;
-            noFilmsPlaceholder.setText(NO_FILMS);
+            mLoadMoreView.setLoadMoreResolver(new LoadMoreSavedMovies(mLoadMoreView, feedList));
+            view.onLoadMore();
+            //noFilmsPlaceholder.setText(NO_FILMS);
             return;
         }
-        int filmsMaxCount = 0;
-        if (feedList.size() < SavedMoviesView.LOAD_VIEW_SET_COUNT) {
-            filmsMaxCount = feedList.size();
-        } else filmsMaxCount = SavedMoviesView.LOAD_VIEW_SET_COUNT;
+        int filmsMaxCount = Math.min(feedList.size(), SavedMoviesView.LOAD_VIEW_SET_COUNT);
         for (int i = 0; i < filmsMaxCount; i++) {
             mLoadMoreView.addView(new MovieItemView(this.getApplicationContext(), feedList.get(i)));
         }
-        //mLoadMoreView.setLoadMoreResolver(new LoadMoreView(mLoadMoreView, feedList));
     }
 
     @Override
@@ -87,5 +91,9 @@ public class WatchLaterActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    public static RequestQueue getmQueue() {
+        return mQueue;
     }
 }

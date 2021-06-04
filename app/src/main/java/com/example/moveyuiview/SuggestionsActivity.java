@@ -175,7 +175,7 @@ public class SuggestionsActivity extends AppCompatActivity {
     }
 
     private void fetchMovies(final MovieCardsAdapter adapter) {
-        String url = "http://192.168.49.2:80/movie/fetch";
+        String url = "http://192.168.49.2:80/user/movie/fetch";
         JsonObjectRequest stringRequest = new JsonObjectRequest(url, null,
                 response -> {
                     try {
@@ -190,10 +190,8 @@ public class SuggestionsActivity extends AppCompatActivity {
     }
 
     private void saveSwipe(final boolean liked, final Integer movieId, BaseMovie currentMovie) throws AuthFailureError, JSONException {
-        final Integer userId = 1;
-        String url = "http://192.168.49.2:80/notification/swipes";
+        String url = "http://192.168.49.2:80/user/swipes";
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("userId", userId);
         jsonBody.put("movieId", movieId);
         jsonBody.put("liked", liked);
         System.out.println(jsonBody.toString());
@@ -216,8 +214,7 @@ public class SuggestionsActivity extends AppCompatActivity {
     }
 
     private void saveMovie(final Integer movieId) {
-        final Integer userId = 1;
-        String url = "http://192.168.49.2:80/notification/savings/" + userId + '/' + movieId;
+        String url = "http://192.168.49.2:80/user/notification/savings/" + movieId;
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> Toast.makeText(SuggestionsActivity.this, "Added to 'Watch later'", Toast.LENGTH_SHORT).show(),
                 error -> Toast.makeText(SuggestionsActivity.this, "Error!", Toast.LENGTH_SHORT).show());
