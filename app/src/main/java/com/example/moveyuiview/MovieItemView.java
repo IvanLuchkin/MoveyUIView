@@ -14,20 +14,16 @@ import com.uwetrottmann.tmdb2.entities.BaseMovie;
 @Layout(R.layout.load_more_item_view)
 public class MovieItemView {
 
-    @View(R.id.username)
-    private TextView titleTxt;
-
-    @View(R.id.comment)
-    private TextView captionTxt;
-
-    @View(R.id.date)
-    private TextView timeTxt;
-
-    @View(R.id.newsImageView)
-    private ImageView imageView;
-
     private final BaseMovie mInfo;
     private final Context mContext;
+    @View(R.id.username)
+    private TextView titleTxt;
+    @View(R.id.comment)
+    private TextView captionTxt;
+    @View(R.id.date)
+    private TextView timeTxt;
+    @View(R.id.newsImageView)
+    private ImageView imageView;
 
     public MovieItemView(Context context, BaseMovie info) {
         mContext = context;

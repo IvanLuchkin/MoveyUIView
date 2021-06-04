@@ -12,17 +12,14 @@ import com.uwetrottmann.tmdb2.entities.Review;
 @Layout(R.layout.review_copy)
 public class ReviewItemView {
 
-    @View(R.id.username)
-    private TextView username;
-
-    @View(R.id.comment)
-    private TextView content;
-
-    @View(R.id.date)
-    private TextView date;
-
     private final Review mInfo;
     private final Context mContext;
+    @View(R.id.username)
+    private TextView username;
+    @View(R.id.comment)
+    private TextView content;
+    @View(R.id.date)
+    private TextView date;
 
     public ReviewItemView(Context context, Review review) {
         mContext = context;

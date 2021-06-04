@@ -12,7 +12,7 @@
         android:usesCleartextTraffic="true"
         android:fullBackupContent="true">
 
-        <activity android:name=".NewsActivity" />
+        <activity android:name=".WatchLaterActivity" />
         <activity android:name=".LikedFilmsActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SuggestionsActivity"/>

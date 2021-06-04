@@ -2,7 +2,6 @@ package com.example.moveyuiview;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,24 +18,11 @@ public class LikedFilmsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_liked_movies);
 
         backToProfile = findViewById(R.id.backToProfile);
-        backToProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                overridePendingTransition(0, 0);
-            }
+        backToProfile.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            overridePendingTransition(0, 0);
         });
 
         mLoadMoreView = findViewById(R.id.loadReviewView);
-        // setupView();
     }
-
-    /*private void setupView(){
-        List<InfiniteFeedInfo> feedList = Utils.loadInfiniteFeeds(this.getApplicationContext());
-        Log.d("DEBUG", "LoadMoreView.LOAD_VIEW_SET_COUNT " + LoadMoreView.LOAD_VIEW_SET_COUNT);
-        for(int i = 0; i < LoadMoreView.LOAD_VIEW_SET_COUNT; i++){
-            mLoadMoreView.addView(new ItemView(this.getApplicationContext(), feedList.get(i)));
-        }
-        mLoadMoreView.setLoadMoreResolver(new LoadMoreView(mLoadMoreView, feedList));
-    }*/
 }

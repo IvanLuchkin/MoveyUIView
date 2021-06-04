@@ -14,11 +14,11 @@ import com.uwetrottmann.tmdb2.entities.BaseMovie;
 
 import java.util.List;
 
-public class NewsActivity extends AppCompatActivity {
+public class WatchLaterActivity extends AppCompatActivity {
 
+    private static final String NO_FILMS = "No Films";
     private InfinitePlaceHolderView mLoadMoreView;
     private TextView noFilmsPlaceholder;
-    private static final String NO_FILMS = "No Films";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +30,14 @@ public class NewsActivity extends AppCompatActivity {
         noFilmsPlaceholder = findViewById(R.id.no_saved_films);
 
         BottomNavigationView navView = findViewById(R.id.bot_nav);
-        setNavigationBarState(navView, R.id.news);
+        setNavigationBarState(navView);
 
         mLoadMoreView = findViewById(R.id.loadMoreView);
         setupView();
     }
 
     private void setupView() {
-        Log.d("DEBUG", "LoadMoreView.LOAD_VIEW_SET_COUNT " + LoadMoreView.LOAD_VIEW_SET_COUNT);
+        Log.d("DEBUG", "LoadMoreView.LOAD_VIEW_SET_COUNT " + SavedMoviesView.LOAD_VIEW_SET_COUNT);
         List<BaseMovie> feedList;
         if (CurrentContextHolder
                 .getInstance().getCachedSavedMovies().size() != 0) {
@@ -48,9 +48,9 @@ public class NewsActivity extends AppCompatActivity {
             return;
         }
         int filmsMaxCount = 0;
-        if (feedList.size() < LoadMoreView.LOAD_VIEW_SET_COUNT) {
+        if (feedList.size() < SavedMoviesView.LOAD_VIEW_SET_COUNT) {
             filmsMaxCount = feedList.size();
-        } else filmsMaxCount = LoadMoreView.LOAD_VIEW_SET_COUNT;
+        } else filmsMaxCount = SavedMoviesView.LOAD_VIEW_SET_COUNT;
         for (int i = 0; i < filmsMaxCount; i++) {
             mLoadMoreView.addView(new MovieItemView(this.getApplicationContext(), feedList.get(i)));
         }
@@ -63,12 +63,12 @@ public class NewsActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
-    private void setNavigationBarState(BottomNavigationView navView, int currentButtonId) {
-        navView.setSelectedItemId(currentButtonId);
+    private void setNavigationBarState(BottomNavigationView navView) {
+        navView.setSelectedItemId(R.id.news);
 
         navView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.news) {
-                Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), WatchLaterActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
                 return true;

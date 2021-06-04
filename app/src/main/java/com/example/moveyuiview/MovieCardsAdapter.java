@@ -12,44 +12,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.uwetrottmann.tmdb2.entities.BaseMovie;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
 
-    Context context;
-    Bitmap bitmap;
-
     public MovieCardsAdapter(Context context, int resourceID, List<BaseMovie> items) {
         super(context, resourceID, items);
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        BaseMovie movieCardItem = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_card, parent, false);
-        }
-        TextView title = convertView.findViewById(R.id.title);
-        ImageView image = convertView.findViewById(R.id.movieImageView);
-        TextView genre = convertView.findViewById(R.id.genre);
-        TextView releaseYear = convertView.findViewById(R.id.year);
-        //genre.setText("Some genre,Drama");  //comment
-        releaseYear.setText(movieCardItem.release_date == null ? "-" : movieCardItem.release_date.toString());
-        LoadImage(movieCardItem.poster_path, image);
-        //  LoadImage("https://i.ytimg.com/vi/BsB62H0Q3V0/hqdefault.jpg", image);
-        // releaseYear.setText((new String(String.valueOf(Math.random() * 1000))));
-        title.setText(movieCardItem.title);
-        //title.setText("movieCardItem.title");
-        return convertView;
     }
 
     public static void LoadImage(String url, ImageView imageView) {
@@ -58,15 +35,28 @@ public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
             Bitmap bitmap = viewHelper.execute(url).get();
             imageView.setImageBitmap(bitmap);
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }
 
-    public static class ImageViewHelper extends AsyncTask<String, Void, Bitmap> {
+    @SuppressLint("SetTextI18n")
+    @Override
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        BaseMovie movieCardItem = getItem(position);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_card, parent, false);
+        }
+        TextView title = convertView.findViewById(R.id.title);
+        ImageView image = convertView.findViewById(R.id.movieImageView);
+        TextView releaseYear = convertView.findViewById(R.id.year);
+        releaseYear.setText(movieCardItem.release_date == null ? "-" : movieCardItem.release_date.toString());
+        LoadImage(movieCardItem.poster_path, image);
+        title.setText(movieCardItem.title);
+        return convertView;
+    }
 
+    public static class ImageViewHelper extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... strings) {
             Bitmap bitmap = null;
@@ -80,8 +70,6 @@ public class MovieCardsAdapter extends ArrayAdapter<BaseMovie> {
                 inputStream = httpURLConnection.getInputStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
