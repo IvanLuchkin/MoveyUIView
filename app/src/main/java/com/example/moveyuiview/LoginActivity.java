@@ -79,13 +79,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validate(String username, String password) {
-        login(username, password);
         //test();
         if (username.equalsIgnoreCase("admin")) {
             if (password.equalsIgnoreCase("admin")) {
                 SharedPreferences.Editor edit = prefs.edit();
                 edit.putString("username", username);
                 edit.apply();
+                login(username, password);
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 return true;
             }
